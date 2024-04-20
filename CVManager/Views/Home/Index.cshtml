@@ -1,0 +1,204 @@
+﻿@{
+    ViewBag.Title = "CV Dashboard";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
+
+
+<div class="row  mt-4">
+    <div class="col-6">
+      <h4>Active Users</h4>
+    </div> 
+    <div class="col-6">
+        <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#NewUserModal">Add new user</button>
+    </div>
+</div>
+
+<div class="row mt-2" id="userDiv">
+   
+</div>
+
+@*Modal for creating new user*@
+<div class="modal" tabindex="-1" id="NewUserModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 row">
+                    <label for="firstName" class="col-sm-4 col-form-label">First Name</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="firstName">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="lastName" class="col-sm-4 col-form-label">Last Name</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="lastName">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="email" class="col-sm-4 col-form-label">Email</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="email">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="mobileNumber" class="col-sm-4 col-form-label">Mobile Number</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="mobileNumber">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="linkedInProfile" class="col-sm-4 col-form-label">LinkedIn Profile</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="linkedInProfile">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="githubProfile" class="col-sm-4 col-form-label">GitHub Profile</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="githubProfile">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="cvFile" class="col-sm-4 form-label">Upload CV</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="file" id="cvFile">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function ()
+    {
+        GetUsers();
+    });
+
+    function GetUsers()
+    {
+        var settings = {
+            "url": "https://localhost:7283/CVManager/v1/GetUsers",
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+            },
+        };
+
+        $.ajax(settings).done(function (response)
+        {
+            var userData = ``;
+
+            response.forEach(function (item, index)
+            {
+                userData += `<div class="col-lg-3 col-sm-12 mt-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${item.firstName} ${item.lastName}</h5>
+                                        <p id="test" class="card-text">${item.email}</p>
+                                          <div class="row">
+                                              <div class="col-2"><a href="mailto:${item.email}" target="_blank"><i class="fas fa-at"></i></a></div>
+                                              <div class="col-2"><a href="tel:${item.mobileNumber}" target="_blank"><i class="fas fa-phone"></i></a></div>
+                                              <div class="col-2"><a href="${item.githubProfileLink}" target="_blank"><i class="fab fa-github"></i></a></div>
+                                              <div class="col-2"><a href="${item.linkedInProfileLink}" target="_blank"><i class="fab fa-linkedin-in"></i></a></div>
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>`;
+            })
+            $("#userDiv").html(userData);
+        }); 
+    }
+
+    function SaveUser()
+    {
+        
+
+        var settings = {
+            "url": "https://localhost:7283/CVManager/v1/SaveUser",
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify
+            ({
+                "userID": 0,
+                "firstName": "Harry",
+                "lastName": "Potter",
+                "email": "Potter@gmail.com",
+                "mobileNumber": "08427844361",
+                "isActive": true,
+                "linkedInProfileLink": "https://www.linkedin.com/in/test-profile-Potter/",
+                "githubProfileLink": "https://github.com/testProfilePerryPotter"
+            }),
+        };
+
+        $.ajax(settings).done(function (response)
+        {
+            var userData = ``;
+
+            response.forEach(function (item, index)
+            {
+                userData += `<div class="col-3 mt-2">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col"><h5 class="card-title">${item.firstName} ${item.lastName}</h5></div>
+                                        <div class="col"><i class="fas fa-edit"></i></div>
+                                    </div>
+                                    <p class="card-text">${item.email}</p>
+                                      <div class="row">
+                                          <div class="col-2"><a href="${item.githubProfileLink}" target="_blank"><i class="fab fa-github"></i></a></div>
+                                          <div class="col-2"><a href="${item.linkedInProfileLink}" target="_blank"><i class="fab fa-linkedin-in"></i></a></div>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>`;
+            })
+            $("#userDiv").html(userData);
+        });
+    }
+
+    //onchange event for adding attachment
+    var base64Data = "";
+    var attachmentName = "";
+    var fileSize = "";
+    var fileType = "";
+
+    // Get a reference to the file input
+    const fileInput = document.querySelector('#cvFile');
+
+    // Listen for the change event so we can capture the file
+    fileInput.addEventListener('change', (e) =>
+    {
+        // Get a reference to the file
+        const file = e.target.files[0];
+
+        // Encode the file using the FileReader API
+        const reader = new FileReader();
+        reader.onloadend = () =>
+        {
+            // Use a regex to remove data url part
+            const base64String = reader.result
+                .replace('data:', '')
+                .replace(/^.+,/, '');
+
+            base64Data = base64String;
+            attachmentName = file.name;
+            fileSize = file.size;
+            fileType = file.type;
+
+        };
+        reader.readAsDataURL(file);
+    });
+</script>
