@@ -1,22 +1,146 @@
 ﻿@{
     ViewBag.Title = "CV Dashboard";
 }
+
+<style>
+.single_advisor_profile {
+    position: relative;
+    margin-bottom: 50px;
+    -webkit-transition-duration: 500ms;
+    transition-duration: 500ms;
+    z-index: 1;
+    border-radius: 15px;
+    -webkit-box-shadow: 0 0.25rem 1rem 0 rgba(47, 91, 234, 0.125);
+    box-shadow: 0 0.25rem 1rem 0 rgba(47, 91, 234, 0.125);
+}
+.single_advisor_profile .advisor_thumb {
+    position: relative;
+    z-index: 1;
+    border-radius: 15px 15px 0 0;
+    margin: 0 auto;
+    padding: 15px 15px 0 15px;
+    background-color: #4149ab;
+    overflow: hidden;
+}
+.single_advisor_profile .advisor_thumb::after {
+    -webkit-transition-duration: 500ms;
+    transition-duration: 500ms;
+    position: absolute;
+    width: 150%;
+    height: 80px;
+    bottom: -45px;
+    left: -25%;
+    content: "";
+    background-color: #ffffff;
+    -webkit-transform: rotate(-15deg);
+    transform: rotate(-15deg);
+}
+
+.single_advisor_profile .advisor_thumb .social-info {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    bottom: 0;
+    right: 30px;
+    text-align: right;
+}
+.single_advisor_profile .advisor_thumb .social-info a {
+    font-size: 14px;
+    color: #020710;
+    padding: 0 5px;
+}
+.single_advisor_profile .advisor_thumb .social-info a:hover,
+.single_advisor_profile .advisor_thumb .social-info a:focus {
+    color: #3f43fd;
+}
+.single_advisor_profile .advisor_thumb .social-info a:last-child {
+    padding-right: 0;
+}
+.single_advisor_profile .single_advisor_details_info {
+    position: relative;
+    z-index: 1;
+    padding: 30px;
+    text-align: right;
+    -webkit-transition-duration: 500ms;
+    transition-duration: 500ms;
+    border-radius: 0 0 15px 15px;
+    background-color: #ffffff;
+}
+.single_advisor_profile .single_advisor_details_info::after {
+    -webkit-transition-duration: 500ms;
+    transition-duration: 500ms;
+    position: absolute;
+    z-index: 1;
+    width: 50px;
+    height: 3px;
+    background-color: #3f43fd;
+    content: "";
+    top: 12px;
+    right: 30px;
+}
+.single_advisor_profile .single_advisor_details_info h6 {
+    margin-bottom: 0.25rem;
+    -webkit-transition-duration: 500ms;
+    transition-duration: 500ms;
+}
+
+.single_advisor_profile .single_advisor_details_info p {
+    -webkit-transition-duration: 500ms;
+    transition-duration: 500ms;
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.single_advisor_profile:hover .advisor_thumb::after,
+.single_advisor_profile:focus .advisor_thumb::after {
+    background-color: #070a57;
+}
+.single_advisor_profile:hover .advisor_thumb .social-info a,
+.single_advisor_profile:focus .advisor_thumb .social-info a {
+    color: #ffffff;
+}
+.single_advisor_profile:hover .advisor_thumb .social-info a:hover,
+.single_advisor_profile:hover .advisor_thumb .social-info a:focus,
+.single_advisor_profile:focus .advisor_thumb .social-info a:hover,
+.single_advisor_profile:focus .advisor_thumb .social-info a:focus {
+    color: #ffffff;
+}
+.single_advisor_profile:hover .single_advisor_details_info,
+.single_advisor_profile:focus .single_advisor_details_info {
+    background-color: #070a57;
+}
+.single_advisor_profile:hover .single_advisor_details_info::after,
+.single_advisor_profile:focus .single_advisor_details_info::after {
+    background-color: #ffffff;
+}
+.single_advisor_profile:hover .single_advisor_details_info h6,
+.single_advisor_profile:focus .single_advisor_details_info h6 {
+    color: #ffffff;
+}
+.single_advisor_profile:hover .single_advisor_details_info p,
+.single_advisor_profile:focus .single_advisor_details_info p {
+    color: #ffffff;
+}
+</style>
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
 
 
 <div class="row  mt-4">
     <div class="col-6">
-      <h4>Active Users</h4>
-    </div> 
+        <h4>Profiles</h4>
+    </div>
     <div class="col-6">
         <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#NewUserModal">Add new user</button>
     </div>
 </div>
 
 <div class="row mt-2" id="userDiv">
-   
+
 </div>
+
 
 @*Modal for creating new user*@
 <div class="modal" tabindex="-1" id="NewUserModal">
@@ -52,6 +176,18 @@
                     </div>
                 </div>
                 <div class="mb-3 row">
+                    <label for="occupation" class="col-sm-4 col-form-label">Occupation</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="occupation">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="area" class="col-sm-4 col-form-label">Area</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="area">
+                    </div>
+                </div>
+                <div class="mb-3 row">
                     <label for="linkedInProfile" class="col-sm-4 col-form-label">LinkedIn Profile</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" id="linkedInProfile">
@@ -69,10 +205,16 @@
                         <input class="form-control" type="file" id="cvFile">
                     </div>
                 </div>
+                <div class="mb-3 row">
+                    <label for="profilePic" class="col-sm-4 form-label">Profile Picture</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="file" id="profilePic">
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" onclick="SaveUser()" class="btn btn-primary">Save User</button>
             </div>
         </div>
     </div>
@@ -100,83 +242,81 @@
 
             response.forEach(function (item, index)
             {
-                userData += `<div class="col-lg-3 col-sm-12 mt-2">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${item.firstName} ${item.lastName}</h5>
-                                        <p id="test" class="card-text">${item.email}</p>
-                                          <div class="row">
-                                              <div class="col-2"><a href="mailto:${item.email}" target="_blank"><i class="fas fa-at"></i></a></div>
-                                              <div class="col-2"><a href="tel:${item.mobileNumber}" target="_blank"><i class="fas fa-phone"></i></a></div>
-                                              <div class="col-2"><a href="${item.githubProfileLink}" target="_blank"><i class="fab fa-github"></i></a></div>
-                                              <div class="col-2"><a href="${item.linkedInProfileLink}" target="_blank"><i class="fab fa-linkedin-in"></i></a></div>
-                                          </div>
+
+                userData += `<div class="col-12 col-sm-6 col-lg-3" onclick="viewProfile(${item.userID})">
+                                  <div class="single_advisor_profile wow fadeInUp" data-wow-delay="0.2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInUp;">
+                                   
+                                    <div class="advisor_thumb"><img id="base64Image" src="data:image/jpeg;base64,${item.pictureData}" style="width: 100%;height: 30vh;" alt="Base64 Image">
+
+                                      <div class="social-info"><a href="mailto:${item.email}" target="_blank"><i class="fas fa-at"></i></a>
+                                                               <a href="tel:${item.mobileNumber}" target="_blank"><i class="fas fa-phone"></i></a>
+                                                               <a href="${item.githubProfileLink}" target="_blank"><i class="fab fa-github"></i></a>
+                                                               <a href="${item.linkedInProfileLink}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                                                               </div>
                                     </div>
-                                </div>
-                            </div>`;
+                                    <div class="single_advisor_details_info">
+                                      <h6>${item.firstName} ${item.lastName}</h6>
+                                      <p class="designation">${item.occupation}</p>
+                                    </div>
+                                  </div>
+                                </div>`;
             })
             $("#userDiv").html(userData);
-        }); 
+        });
     }
 
     function SaveUser()
     {
-        
+        var firstName = $("#firstName").val();
+        var lastName = $("#lastName").val();
+        var email = $("#email").val();
+        var mobile = $("#mobileNumber").val();
+        var occupation = $("#occupation").val();
+        var area = $("#area").val();
+        var linkedIn = $("#linkedInProfile").val();
+        var gitHub = $("#githubProfile").val();
 
         var settings = {
             "url": "https://localhost:7283/CVManager/v1/SaveUser",
-            "method": "GET",
+            "method": "POST",
             "timeout": 0,
             "headers": {
                 "Content-Type": "application/json"
             },
             "data": JSON.stringify
-            ({
-                "userID": 0,
-                "firstName": "Harry",
-                "lastName": "Potter",
-                "email": "Potter@gmail.com",
-                "mobileNumber": "08427844361",
-                "isActive": true,
-                "linkedInProfileLink": "https://www.linkedin.com/in/test-profile-Potter/",
-                "githubProfileLink": "https://github.com/testProfilePerryPotter"
-            }),
+                ({
+                    "userID": 0,
+                    "firstName": firstName,
+                    "lastName": lastName,
+                    "email": email,
+                    "mobileNumber": mobile,
+                    "isActive": true,
+                    "occupation": occupation,
+                    "area": area,
+                    "linkedInProfileLink": linkedIn,
+                    "githubProfileLink": gitHub,
+                    "fileName": attachmentName,
+                    "fileType": fileType,
+                    "fileData": base64Data,
+                    "pictureData": base64Picture 
+                }),
         };
 
         $.ajax(settings).done(function (response)
         {
-            var userData = ``;
-
-            response.forEach(function (item, index)
-            {
-                userData += `<div class="col-3 mt-2">
-                            <div class="card" style="width: 18rem;">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col"><h5 class="card-title">${item.firstName} ${item.lastName}</h5></div>
-                                        <div class="col"><i class="fas fa-edit"></i></div>
-                                    </div>
-                                    <p class="card-text">${item.email}</p>
-                                      <div class="row">
-                                          <div class="col-2"><a href="${item.githubProfileLink}" target="_blank"><i class="fab fa-github"></i></a></div>
-                                          <div class="col-2"><a href="${item.linkedInProfileLink}" target="_blank"><i class="fab fa-linkedin-in"></i></a></div>
-                                      </div>
-                                </div>
-                            </div>
-                        </div>`;
-            })
-            $("#userDiv").html(userData);
+            location.reload();
         });
     }
 
     //onchange event for adding attachment
     var base64Data = "";
     var attachmentName = "";
-    var fileSize = "";
     var fileType = "";
+    var base64Picture = "";
 
     // Get a reference to the file input
     const fileInput = document.querySelector('#cvFile');
+    const pictureInput = document.querySelector('#profilePic');
 
     // Listen for the change event so we can capture the file
     fileInput.addEventListener('change', (e) =>
@@ -195,10 +335,33 @@
 
             base64Data = base64String;
             attachmentName = file.name;
-            fileSize = file.size;
             fileType = file.type;
 
         };
         reader.readAsDataURL(file);
     });
+
+    pictureInput.addEventListener('change', (e) =>
+    {
+        const file = e.target.files[0];
+
+        const reader = new FileReader();
+        reader.onloadend = () =>
+        {
+            const base64String = reader.result
+                .replace('data:', '')
+                .replace(/^.+,/, '');
+
+            base64Picture = base64String;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    function viewProfile(userID)
+    {
+        var link = window.location.origin;
+        window.location.href = `${link}/User/index/?userID=${userID}`;
+    }
 </script>
+
+    
